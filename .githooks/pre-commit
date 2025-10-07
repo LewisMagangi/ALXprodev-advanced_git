@@ -1,0 +1,23 @@
+#!/bin/bash
+# pre-commit hook: ensures every directory has a README.md file
+
+echo "🔍 Checking for README.md files in all directories..."
+
+missing=false
+
+# Loop through all directories except .git and .githooks
+for dir in $(find . -type d ! -path "./.git*" ! -path "./.githooks*"); do
+  if [ ! -f "$dir/README.md" ]; then
+    echo "❌ Missing README.md in: $dir"
+    missing=true
+  fi
+done
+
+# Abort commit if any README is missing
+if [ "$missing" = true ]; then
+  echo "🚫 Commit aborted. Please add missing README.md files."
+  exit 1
+fi
+
+echo "✅ All directories have README.md. Proceeding with commit."
+exit 0
